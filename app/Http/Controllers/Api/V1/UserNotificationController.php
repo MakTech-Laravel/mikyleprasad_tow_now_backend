@@ -234,6 +234,14 @@ class UserNotificationController extends Controller
      */
     public function sendTestPushToToken(Request $request): JsonResponse
     {
+        // FIREBASE-DISABLED START (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        return sendResponse(
+            status: false,
+            message: 'Firebase push notifications are currently disabled.',
+            data: null,
+            statusCode: HttpStatus::HTTP_NOT_FOUND
+        );
+        /*
         abort_unless($this->testNotificationRouteEnabled(), HttpStatus::HTTP_NOT_FOUND);
 
         $validated = $request->validate([
@@ -284,6 +292,8 @@ class UserNotificationController extends Controller
                 statusCode: HttpStatus::HTTP_BAD_GATEWAY
             );
         }
+        */
+        // FIREBASE-DISABLED END
     }
 
     private function testNotificationRouteEnabled(): bool

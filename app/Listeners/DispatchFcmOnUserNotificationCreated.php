@@ -16,6 +16,9 @@ final class DispatchFcmOnUserNotificationCreated
 {
     public function handle(UserNotificationCreated $event): void
     {
+        // FIREBASE-DISABLED START (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        return;
+        /*
         $notification = $event->notification;
         $recipient = User::query()->find($notification->user_id);
         if ($recipient === null) {
@@ -41,5 +44,7 @@ final class DispatchFcmOnUserNotificationCreated
             ]);
             report($e);
         }
+        */
+        // FIREBASE-DISABLED END
     }
 }

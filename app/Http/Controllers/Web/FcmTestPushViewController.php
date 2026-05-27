@@ -22,6 +22,9 @@ class FcmTestPushViewController extends Controller
 {
     public function create(): View
     {
+        // FIREBASE-DISABLED (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        abort(HttpStatus::HTTP_NOT_FOUND);
+
         abort_unless($this->routeEnabled(), HttpStatus::HTTP_NOT_FOUND);
 
         $users = User::query()
@@ -38,6 +41,9 @@ class FcmTestPushViewController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // FIREBASE-DISABLED (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        abort(HttpStatus::HTTP_NOT_FOUND);
+
         abort_unless($this->routeEnabled(), HttpStatus::HTTP_NOT_FOUND);
 
         /** @var list<int> $allowedIds */

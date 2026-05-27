@@ -7,8 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dev/fcm-test-push', [FcmTestPushViewController::class, 'create'])->name('dev.fcm-test-push');
-Route::post('/dev/fcm-test-push', [FcmTestPushViewController::class, 'store'])->name('dev.fcm-test-push.send');
+// FIREBASE-DISABLED (docs/FIREBASE_DISABLE_AND_RESTORE.md):
+// Route::get('/dev/fcm-test-push', [FcmTestPushViewController::class, 'create'])->name('dev.fcm-test-push');
+// Route::post('/dev/fcm-test-push', [FcmTestPushViewController::class, 'store'])->name('dev.fcm-test-push.send');
 
 
 Route::get('/oauth/token-capture', function () {

@@ -46,12 +46,14 @@ class SendPushNotification implements ShouldQueue
 
     public function handle(): void
     {
+        // FIREBASE-DISABLED START (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        return;
+        /*
         $token = $this->recipient->fcm_token;
         if ($token === null || $token === '') {
             return;
         }
 
-        /** @var FcmNotificationLog $log */
         $log = FcmNotificationLog::query()->create([
             'user_id' => $this->recipient->id,
             'title' => $this->title,
@@ -99,5 +101,7 @@ class SendPushNotification implements ShouldQueue
             ]);
             report($e);
         }
+        */
+        // FIREBASE-DISABLED END
     }
 }

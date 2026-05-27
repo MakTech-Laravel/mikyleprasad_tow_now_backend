@@ -36,7 +36,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Ride::observe(RideObserver::class);
 
-        Event::listen(UserNotificationCreated::class, DispatchFcmOnUserNotificationCreated::class);
+        // FIREBASE-DISABLED START (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        // Event::listen(UserNotificationCreated::class, DispatchFcmOnUserNotificationCreated::class);
+        // FIREBASE-DISABLED END
 
         $this->validateCurrencyConfig();
         RateLimiter::for('api-login', function (Request $request) {

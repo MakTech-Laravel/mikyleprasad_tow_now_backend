@@ -23,7 +23,7 @@ Route::controller(ContactVerificationOtpController::class)->prefix('verification
 
 Route::controller(UserController::class)->group(function () {
     Route::get('/me', 'me');
-    Route::put('/fcm-token', 'updateFcmToken');
+    // FIREBASE-DISABLED: Route::put('/fcm-token', 'updateFcmToken');
 });
 
 Route::get('/login-history', [LoginHistoryController::class, 'index']);
@@ -44,7 +44,7 @@ Route::controller(UserNotificationController::class)->prefix('notifications')->g
     Route::get('/', 'index');
     Route::post('/read-all', 'markAllRead');
     Route::post('/test-broadcast', 'storeTest');
-    Route::post('/test-push-token', 'sendTestPushToToken');
+    // FIREBASE-DISABLED: Route::post('/test-push-token', 'sendTestPushToToken');
     Route::post('/{id}/read', 'markAsRead');
     Route::post('/{id}/unread', 'markAsUnread');
     Route::get('/{id}', 'show');

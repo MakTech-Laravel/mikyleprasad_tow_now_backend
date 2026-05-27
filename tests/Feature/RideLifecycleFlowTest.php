@@ -327,10 +327,7 @@ test('ride create returns created when firebase messaging throws', function (): 
     $driver = createApprovedDriver('driver-fcm-fail@dev.com');
     $driver->forceFill(['fcm_token' => 'driver-fcm-test-token'])->save();
 
-    Firebase::shouldReceive('messaging')
-        ->atLeast()->once()
-        ->andThrow(new RuntimeException('simulated FCM failure'));
-
+    // FIREBASE-DISABLED: restore Firebase::shouldReceive mock + failed log assertion when FCM is re-enabled (docs/FIREBASE_DISABLE_AND_RESTORE.md).
     Passport::actingAs($user);
 
     $this->postJson('/api/v1/user/rides', [
@@ -341,7 +338,7 @@ test('ride create returns created when firebase messaging throws', function (): 
 
     expect(Ride::query()->where('user_id', $user->id)->where('driver_id', $driver->id)->exists())->toBeTrue();
     expect(UserNotification::query()->count())->toBe(2);
-    expect(FcmNotificationLog::query()->where('status', 'failed')->count())->toBeGreaterThanOrEqual(2);
+    expect(FcmNotificationLog::query()->where('status', 'failed')->count())->toBe(0);
 });
 
 test('user ride track and status endpoints resolve by uuid', function (): void {

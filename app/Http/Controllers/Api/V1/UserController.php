@@ -28,6 +28,14 @@ class UserController extends Controller
 
     public function updateFcmToken(UpdateFcmTokenRequest $request): JsonResponse
     {
+        // FIREBASE-DISABLED START (docs/FIREBASE_DISABLE_AND_RESTORE.md)
+        return sendResponse(
+            status: false,
+            message: 'Firebase push notifications are currently disabled.',
+            data: null,
+            statusCode: HttpStatus::HTTP_NOT_FOUND
+        );
+        /*
         $user = $request->user();
         $token = $request->validated('fcm_token');
 
@@ -41,5 +49,7 @@ class UserController extends Controller
             data: null,
             statusCode: HttpStatus::HTTP_OK
         );
+        */
+        // FIREBASE-DISABLED END
     }
 }
