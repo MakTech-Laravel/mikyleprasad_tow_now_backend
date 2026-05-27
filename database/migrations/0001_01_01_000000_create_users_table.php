@@ -1,0 +1,70 @@
+<?php
+
+use App\Enums\AccountStatus;
+use App\Enums\ApprovalStatus;
+use App\Enums\UserRole;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('username')->nullable()->unique();
+
+            $table->string('name')->nullable();
+            $table->string('email')->unique();
+            $table->string('role', 32)->default(UserRole::USER->value);
+            $table->string('phone')->nullable()->unique();
+            $table->string('locale', 24)->default('en');
+            $table->string('avatar')->nullable();
+
+            $table->string('address', 500)->nullable();
+            $table->text('bio')->nullable();
+            $table->string('status', 32)->default(AccountStatus::ACTIVE->value);
+            $table->string('approval_status', 32)->default(ApprovalStatus::PENDING->value);
+            $table->boolean('is_suspended')->default(false);
+            $table->boolean('is_featured')->default(false);
+
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+
+
+            $table->text('two_factor_secret')->nullable();
+            $table->text('two_factor_recovery_codes')->nullable();
+            $table->timestamp('two_factor_confirmed_at')->nullable();
+
+            $table->string('timezone', 64)->nullable();
+            $table->foreignId('preferred_currency_id')->nullable()->constrained('currencies')->nullOnDelete();
+
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+    }
+};
