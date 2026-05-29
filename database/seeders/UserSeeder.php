@@ -81,31 +81,31 @@ class UserSeeder extends Seeder
                 'bio' => 'I am a demo admin',
             ]
         );
-        User::query()->firstOrCreate(
-            ['email' => 'driver@dev.com'],
-            [
-                'name' => 'Demo Driver',
-                'password' => Hash::make('password'),
-                'role' => UserRole::DRIVER,
-                'email_verified_at' => now(),
-                'address' => '123 Main St, Anytown, USA',
-                'bio' => 'I am a demo driver',
-            ]
-        );
-        User::query()->firstOrCreate(
-            ['email' => 'user@dev.com'],
-            [
-                'name' => 'Demo User',
-                'password' => Hash::make('password'),
-                'role' => UserRole::USER,
-                'email_verified_at' => now(),
-                'address' => '123 Main St, Anytown, USA',
-                'bio' => 'I am a demo user',
-            ]
-        );
+        // User::query()->firstOrCreate(
+        //     ['email' => 'driver@dev.com'],
+        //     [
+        //         'name' => 'Demo Driver',
+        //         'password' => Hash::make('password'),
+        //         'role' => UserRole::DRIVER,
+        //         'email_verified_at' => now(),
+        //         'address' => '123 Main St, Anytown, USA',
+        //         'bio' => 'I am a demo driver',
+        //     ]
+        // );
+        // User::query()->firstOrCreate(
+        //     ['email' => 'user@dev.com'],
+        //     [
+        //         'name' => 'Demo User',
+        //         'password' => Hash::make('password'),
+        //         'role' => UserRole::USER,
+        //         'email_verified_at' => now(),
+        //         'address' => '123 Main St, Anytown, USA',
+        //         'bio' => 'I am a demo user',
+        //     ]
+        // );
 
-        $this->createDrivers();
-        $this->createUsers();
+        // $this->createDrivers();
+        // $this->createUsers();
     }
 
     protected function createDrivers(int $count = 300): void
