@@ -59,9 +59,6 @@ class LanguageSeeder extends Seeder
             update: ['name', 'native_name', 'country_code', 'is_rtl', 'is_active', 'is_default', 'sort_order', 'updated_at'],
         );
 
-        // Bust the language cache so Language::allActive() returns fresh data
-        Language::clearCache();
-
         $this->command->info('Languages seeded ('.count($languages).' locales).');
     }
 }
