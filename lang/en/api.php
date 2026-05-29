@@ -74,7 +74,7 @@ return [
 
     'notification_test_broadcast_hint' => 'Subscribe to your private notifications channel in Echo to see this event.',
 
-    'notification_test_push_default_title' => 'TowNow test push',
+    'notification_test_push_default_title' => 'TowTruckTT test push',
 
     'notification_test_push_default_body' => 'Hello from the demo push sender.',
 
