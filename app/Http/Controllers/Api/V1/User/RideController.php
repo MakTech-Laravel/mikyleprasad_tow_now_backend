@@ -171,14 +171,14 @@ class RideController extends Controller
     {
         $ride = Ride::query()
             ->where('user_id', $request->user()->id)
-            ->whereIn('status', RideStatusEnum::inProgressRideStatuses())
+            ->whereIn('status', RideStatusEnum::openCustomerRideStatuses())
             ->with(['driver', 'user', 'conversation', 'histories'])
             ->latest('id')
             ->first();
 
         return sendResponse(
             status: true,
-            message: 'Active ride fetched successfully.',
+            message: 'Current open ride fetched successfully.',
             data: $ride ? new RideResource($ride) : null,
             statusCode: HttpStatus::HTTP_OK
         );

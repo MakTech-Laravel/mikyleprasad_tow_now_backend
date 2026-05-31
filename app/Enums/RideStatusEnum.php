@@ -98,4 +98,17 @@ enum RideStatusEnum: string
             self::ARRIVED->value,
         ];
     }
+
+    /**
+     * Customer statuses that block a new booking (pending + in-progress).
+     *
+     * @return array<int, string>
+     */
+    public static function openCustomerRideStatuses(): array
+    {
+        return array_merge(
+            [self::PENDING->value],
+            self::inProgressRideStatuses(),
+        );
+    }
 }

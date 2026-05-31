@@ -51,6 +51,51 @@ test('user cannot create duplicate pending request to same driver', function ():
         ->assertJsonPath('success', false);
 });
 
+test('user with pending ride to one driver cannot create request to another driver', function (): void {
+    $user = User::factory()->create();
+    $driverOne = createApprovedDriver('driver-pending-a@dev.com');
+    $driverTwo = createApprovedDriver('driver-pending-b@dev.com');
+
+    Ride::query()->create([
+        'user_id' => $user->id,
+        'driver_id' => $driverOne->id,
+        'status' => RideStatusEnum::PENDING->value,
+        'pickup_location' => 'A',
+        'dropoff_location' => 'B',
+    ]);
+
+    Passport::actingAs($user);
+
+    $this->postJson('/api/v1/user/rides', [
+        'driver_id' => $driverTwo->id,
+        'pickup_location' => 'X',
+        'dropoff_location' => 'Y',
+    ])
+        ->assertStatus(422)
+        ->assertJsonPath('success', false);
+});
+
+test('user rides active endpoint returns pending open ride', function (): void {
+    $user = User::factory()->create();
+    $driver = createApprovedDriver('driver-active-pending@dev.com');
+
+    $ride = Ride::query()->create([
+        'user_id' => $user->id,
+        'driver_id' => $driver->id,
+        'status' => RideStatusEnum::PENDING->value,
+        'pickup_location' => 'A',
+        'dropoff_location' => 'B',
+    ]);
+
+    Passport::actingAs($user);
+
+    $this->getJson('/api/v1/user/rides/active')
+        ->assertOk()
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.id', $ride->id)
+        ->assertJsonPath('data.status', RideStatusEnum::PENDING->value);
+});
+
 test('user with active ride cannot create new request', function (): void {
     $user = User::factory()->create();
     $driverOne = createApprovedDriver('driver-active-1@dev.com');
@@ -106,23 +151,21 @@ test('accepting one pending ride auto system-cancels competing pending rides', f
     $driverOne = createApprovedDriver('driver-auto-cancel-1@dev.com');
     $driverTwo = createApprovedDriver('driver-auto-cancel-2@dev.com');
 
-    Passport::actingAs($user);
-    $this->postJson('/api/v1/user/rides', [
+    $acceptedRide = Ride::query()->create([
+        'user_id' => $user->id,
         'driver_id' => $driverOne->id,
+        'status' => RideStatusEnum::PENDING->value,
         'pickup_location' => 'A',
         'dropoff_location' => 'B',
-    ])->assertCreated();
+    ]);
 
-    $this->postJson('/api/v1/user/rides', [
+    Ride::query()->create([
+        'user_id' => $user->id,
         'driver_id' => $driverTwo->id,
+        'status' => RideStatusEnum::PENDING->value,
         'pickup_location' => 'C',
         'dropoff_location' => 'D',
-    ])->assertCreated();
-
-    $acceptedRide = Ride::query()
-        ->where('user_id', $user->id)
-        ->where('driver_id', $driverOne->id)
-        ->firstOrFail();
+    ]);
 
     Passport::actingAs($driverOne);
     $this->postJson("/api/v1/driver/rides/{$acceptedRide->id}/accept", [

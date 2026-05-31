@@ -155,14 +155,14 @@ class RideLifecycleService
                 throw new HttpException(422, 'Selected driver is invalid.');
             }
 
-            $userHasActiveRide = Ride::query()
+            $userHasOpenRide = Ride::query()
                 ->where('user_id', $user->id)
-                ->whereIn('status', RideStatusEnum::inProgressRideStatuses())
+                ->whereIn('status', RideStatusEnum::openCustomerRideStatuses())
                 ->lockForUpdate()
                 ->exists();
 
-            if ($userHasActiveRide) {
-                throw new HttpException(422, 'You already have an active ride.');
+            if ($userHasOpenRide) {
+                throw new HttpException(422, 'You already have an open ride request.');
             }
 
             $driverHasActiveRide = Ride::query()
@@ -173,17 +173,6 @@ class RideLifecycleService
 
             if ($driverHasActiveRide) {
                 throw new HttpException(422, 'Selected driver is currently unavailable.');
-            }
-
-            $hasPendingForSameDriver = Ride::query()
-                ->where('user_id', $user->id)
-                ->where('driver_id', $driver->id)
-                ->where('status', RideStatusEnum::PENDING->value)
-                ->lockForUpdate()
-                ->exists();
-
-            if ($hasPendingForSameDriver) {
-                throw new HttpException(422, 'You already have a pending request for this driver.');
             }
 
             $ride = Ride::query()->create([
