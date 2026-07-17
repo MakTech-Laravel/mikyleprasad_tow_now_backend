@@ -22,13 +22,16 @@ class AdminProfileResource extends JsonResource
                     'email' => $this->resource['admin']->email,
                     'phone' => $this->resource['admin']->phone,
                     'avatar' => $this->resource['admin']->avatar,
+                    'avatar_url' => $this->resource['admin']->avatar
+                        ? storage_url($this->resource['admin']->avatar)
+                        : null,
                 ],
                 'site_setting' => $this->resource['site_setting'] ? [
                     'id' => $this->resource['site_setting']->id,
                     'site_email' => $this->resource['site_setting']->site_email,
                     'site_phone' => $this->resource['site_setting']->site_phone,
                     'site_address' => $this->resource['site_setting']->site_address,
-                ] : null
+                ] : null,
             ];
         }
 
